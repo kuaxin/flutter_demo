@@ -13,7 +13,7 @@ import kotlinx.android.synthetic.main.fragment_home.*
  *  @author RenGX on 2020/6/11
  *
  */
-class HomeFragment private constructor(): BaseLifeCycleFragment<HomeViewModel>() {
+class HomeFragment constructor(): BaseLifeCycleFragment<HomeViewModel>() {
     private var type: Int? = null
     private var mAdapter:HomeAdapter? = null
     private var list: ArrayList<HomeMultiItemEntity> = ArrayList()

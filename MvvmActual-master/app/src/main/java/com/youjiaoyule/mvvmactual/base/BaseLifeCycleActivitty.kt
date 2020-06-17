@@ -6,6 +6,7 @@ import android.util.Log
 import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import com.gyf.immersionbar.ImmersionBar
 import com.hjq.toast.ToastUtils
 import com.kingja.loadsir.callback.SuccessCallback
 import com.wjx.android.wanandroidmvvm.common.state.State
@@ -24,6 +25,9 @@ abstract class BaseLifeCycleActivitty<VM :BaseViewModel<*>>: BaseActivity() {
     protected lateinit var mViewModel: VM
 
     override fun initView() {
+
+
+
         //展示loading
         showLoading()
         //初始化ViewModel

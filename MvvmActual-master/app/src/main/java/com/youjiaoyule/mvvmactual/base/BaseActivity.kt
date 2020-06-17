@@ -3,6 +3,7 @@ package com.youjiaoyule.mvvmactual.base
 import android.os.Bundle
 import android.os.Message
 import androidx.appcompat.app.AppCompatActivity
+import com.gyf.immersionbar.ImmersionBar
 import com.hjq.toast.ToastUtils
 import com.kingja.loadsir.core.LoadService
 import com.kingja.loadsir.core.LoadSir
@@ -28,6 +29,8 @@ abstract class BaseActivity: AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(getLayoutId())
+        ImmersionBar.with(this).fitsSystemWindows(true)
+            .statusBarDarkFont(true).init()
 
         AppManager.addActivity(this)
 
