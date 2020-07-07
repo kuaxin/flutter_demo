@@ -93,4 +93,10 @@ abstract class BaseFragment:Fragment() {
 
     abstract fun onHandlerReceive(msg: Message)
 
+    override fun onDestroy() {
+        super.onDestroy()
+
+        mHandler?.removeCallbacksAndMessages(null)
+    }
+
 }

@@ -1,7 +1,10 @@
 package com.youjiaoyule.mvvmactual
 
-import org.junit.Assert.assertEquals
 import org.junit.Test
+import java.lang.reflect.InvocationHandler
+import java.lang.reflect.Method
+import java.util.*
+import kotlin.collections.ArrayList
 
 /**
  * Example local unit test, which will execute on the development machine (host).
@@ -11,7 +14,8 @@ import org.junit.Test
 class ExampleUnitTest {
     @Test
     fun addition_isCorrect() {
-        assertEquals(4, 2 + 2)
+        val testUnit = TestUnit()
+        testUnit.main()
     }
 
 
@@ -139,3 +143,207 @@ class AudioPlayer: MediaPlayer{
     }
 
 }
+
+
+fun minSubArrayLen(s: Int, nums: IntArray): Int {
+
+    val n = nums.size
+    if(n == 0){
+        return 0
+    }
+
+    var sum = 0
+
+    var ans = Int.MAX_VALUE
+
+    var start = 0
+    var end = 0
+
+    while (end < n){
+        sum += nums[end]
+
+        while(sum >= s){
+            sum -= nums[start]
+            //找最小值
+            ans = ans.coerceAtMost(end - start + 1)
+            start++
+        }
+
+        end++
+    }
+
+    return if(ans == Int.MAX_VALUE){
+        0
+    }else{
+        ans
+    }
+
+}
+
+
+//装饰者模式
+interface Shape{
+    fun draw()
+}
+
+class Circle: Shape{
+    override fun draw() {
+        println("draw circle")
+    }
+}
+
+abstract class ShapeDecorator(private val decoratedShape: Shape) : Shape
+
+//在这里就可以重新
+class RedShapeDecorator(private val decoratedShape: Shape): ShapeDecorator(decoratedShape) {
+    override fun draw() {
+        decoratedShape.draw()
+        setRedBorder(decoratedShape)
+    }
+
+    private fun setRedBorder(decoratedShape: Shape) {
+        print("设置红色边框")
+    }
+}
+
+
+interface Image{
+    fun display()
+}
+
+class RealImage(): Image{
+
+    private fun loadFromDisk(fileName: String) {
+
+    }
+
+    override fun display() {
+        print("我是真实的图片")
+    }
+
+}
+
+class ImageProxyFactory(private val img: Any): InvocationHandler{
+
+    @Throws(Throwable::class)
+    override fun invoke(proxy: Any?, method: Method?, args: Array<out Any>?): Any? {
+        method?.invoke(img,args)
+        return null
+    }
+
+}
+
+
+class CQueue{
+    private val stackPop:Stack<Int> = Stack()
+    private val stackPush:Stack<Int> = Stack()
+
+
+    fun appendTail(value: Int) {
+        stackPush.push(value)
+    }
+
+    fun deleteHead(): Int {
+        if(stackPop.isEmpty()){
+            while(!stackPush.isEmpty()){
+                stackPop.push(stackPush.pop())
+            }
+        }
+
+        return if(stackPop.isEmpty()){
+            -1
+        }else{
+            stackPop.pop()
+        }
+    }
+
+}
+
+
+@Suppress("DEPRECATED_IDENTITY_EQUALS")
+class Solution {
+    fun kthSmallest(matrix: Array<IntArray>, k: Int): Int {
+
+        val intList = ArrayList<Int>()
+
+        intList.run {
+
+            matrix.forEachIndexed { index, ints ->
+                ints.forEachIndexed { index, i ->
+                    add(i)
+                }
+            }
+
+            sort()
+        }
+
+        return if(k > intList.size){
+            0
+        }else{
+            intList[k - 1]
+        }
+    }
+
+
+    fun longestValidParentheses(s: String): Int {
+        var maxans = 0
+        val stack = Stack<Int>()
+        val toCharArray = s.toCharArray()
+
+        stack.push(-1)
+        toCharArray.forEachIndexed { index, c ->
+            if(c == '(') {
+                stack.push(index)
+            } else {
+                stack.pop()
+                if(stack.isNotEmpty()){
+                    maxans = maxans.coerceAtLeast(index - stack.peek())
+                }else{
+                    stack.push(index)
+                }
+            }
+        }
+
+        return maxans
+
+    }
+
+
+    fun uniquePathsWithObstacles(obstacleGrid: Array<IntArray>): Int {
+
+        if(obstacleGrid.isNullOrEmpty()){
+            return 0
+        }
+
+        val m = obstacleGrid.size
+        val n = obstacleGrid[0].size
+
+
+        var f = IntArray(m)
+
+        f[0] = if(obstacleGrid[0][0] == 0){
+            1
+        }else{
+            0
+        }
+
+        for(i in 0 until n){
+            for(j in 0 until m){
+                if(obstacleGrid[i][j] == 1){
+                    f[j] = 0
+                    continue
+                }
+                if(j - 1 >= 0 && obstacleGrid[i][j - 1] == 0){
+                    f[j] += f[j - 1]
+                }
+            }
+        }
+
+        return f[m -1]
+
+    }
+
+}
+
+
+

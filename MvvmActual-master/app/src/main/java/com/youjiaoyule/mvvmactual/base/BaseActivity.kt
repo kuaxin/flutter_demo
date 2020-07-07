@@ -9,6 +9,7 @@ import com.kingja.loadsir.core.LoadService
 import com.kingja.loadsir.core.LoadSir
 import com.youjiaoyule.mvvmactual.R
 import com.youjiaoyule.mvvmactual.common.AppManager
+import com.youjiaoyule.mvvmactual.utils.ActivityHook
 
 /**
  *  @author RenGX on 2020/6/10
@@ -27,6 +28,9 @@ abstract class BaseActivity: AppCompatActivity() {
     open fun reLoad() {}
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        //防止Android 8.0 屏幕检测发生崩溃
+        ActivityHook.hookOrientation(this)
+
         super.onCreate(savedInstanceState)
         setContentView(getLayoutId())
         ImmersionBar.with(this).fitsSystemWindows(true)
@@ -59,7 +63,6 @@ abstract class BaseActivity: AppCompatActivity() {
 
     //退出App
     private fun doExit() {
-
         if(System.currentTimeMillis() - mExitTime > 2000){
             ToastUtils.show(resources.getString(R.string.exit_app))
             mExitTime = System.currentTimeMillis()
